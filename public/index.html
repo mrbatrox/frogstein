@@ -14,8 +14,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<script src="config.js"></script>
-
 <style>
   :root {
     --bg: #0B0E14;
@@ -64,162 +62,175 @@
     overscroll-behavior: contain;
   }
 
-  /* ---------- FROG + COIN TOSS ANIMATION ---------- */
-
-  .frog-stage {
-    position: relative;
-    width: 220px;
-    height: 220px;
-    margin: 0 auto;
-  }
-
-  .frog-shadow {
-    position: absolute;
-    bottom: 8px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 120px;
-    height: 18px;
-    background: radial-gradient(ellipse, rgba(0,0,0,0.5), transparent 70%);
-    border-radius: 50%;
-    animation: shadowPulse 2.4s ease-in-out infinite;
-  }
-
-  @keyframes shadowPulse {
-    0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.6; }
-    30% { transform: translateX(-50%) scale(0.85); opacity: 0.4; }
-  }
-
-  .frog-body {
-    position: absolute;
-    bottom: 18px;
-    left: 50%;
-    transform: translateX(-50%);
-    animation: frogBob 2.4s ease-in-out infinite;
-  }
-
-  @keyframes frogBob {
-    0%, 100% { transform: translateX(-50%) translateY(0); }
-    30% { transform: translateX(-50%) translateY(-10px); }
-  }
-
-  .frog-arm {
-    transform-origin: 78px 92px;
-    animation: armToss 2.4s ease-in-out infinite;
-  }
-
-  @keyframes armToss {
-    0%   { transform: rotate(0deg); }
-    18%  { transform: rotate(-55deg); }
-    30%  { transform: rotate(10deg); }
-    100% { transform: rotate(0deg); }
-  }
-
-  .coin-toss {
-    position: absolute;
-    left: 50%;
-    bottom: 96px;
-    width: 34px;
-    height: 34px;
-    margin-left: 18px;
-    animation: coinArc 2.4s ease-in-out infinite;
-    filter: drop-shadow(0 0 8px rgba(245,196,81,0.6));
-  }
-
-  @keyframes coinArc {
-    0%   { transform: translate(0px, 0px) scale(0.8) rotateY(0deg); opacity: 0; }
-    16%  { opacity: 1; }
-    30%  { transform: translate(10px, -95px) scale(1) rotateY(540deg); }
-    48%  { transform: translate(20px, -20px) scale(1) rotateY(1080deg); }
-    58%  { transform: translate(22px, 4px) scale(0.9) rotateY(1260deg); opacity: 1; }
-    64%  { opacity: 0; }
-    100% { opacity: 0; }
-  }
-
-  .coin-face {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--gold), #C9922E);
-    border: 2px solid #FFE7A8;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    font-weight: 700;
-    color: #3A2A05;
-  }
-
-  .energy-bar-track {
-    height: 10px;
-    border-radius: 999px;
-    background: var(--card-hi);
-    overflow: hidden;
-  }
-
-  .energy-bar-fill {
-    height: 100%;
-    border-radius: 999px;
-    background: linear-gradient(90deg, var(--cyan), var(--violet));
-    transition: width 0.2s linear;
-  }
-
-  .tap-coin-btn {
-    width: 168px;
-    height: 168px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 35% 30%, #FFE7A8, var(--gold) 55%, #B8862A 100%);
-    border: 4px solid rgba(245,196,81,0.35);
-    box-shadow: 0 0 40px rgba(245,196,81,0.25), inset 0 -8px 16px rgba(0,0,0,0.25);
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700; font-size: 15px; color: #3A2A05;
-    user-select: none;
-    transition: transform 0.08s ease;
-  }
-  .tap-coin-btn:active { transform: scale(0.94); }
-
-  .tab-btn {
-    display: flex; flex-direction: column; align-items: center; gap: 3px;
-    font-size: 11px; color: var(--muted);
-    padding: 6px 0;
-    transition: color 0.15s ease;
-  }
-  .tab-btn.active { color: var(--text); }
-  .tab-icon { font-size: 20px; }
-
   .card {
     background: var(--card);
     border: 1px solid rgba(255,255,255,0.06);
     border-radius: 18px;
   }
 
+  /* ---------- Countdown airdrop ---------- */
+  .airdrop-card {
+    background: linear-gradient(145deg, rgba(168,85,247,0.16), rgba(34,211,238,0.10));
+    border: 1px solid rgba(245,196,81,0.25);
+    border-radius: 22px;
+  }
+  .countdown-box {
+    background: rgba(0,0,0,0.35);
+    border-radius: 12px;
+    padding: 8px 4px;
+    min-width: 58px;
+  }
+
+  /* ---------- Rana che lancia la moneta (ambientale) ---------- */
+  .frog-stage { position: relative; width: 180px; height: 170px; margin: 0 auto; }
+  .frog-shadow {
+    position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%);
+    width: 100px; height: 14px;
+    background: radial-gradient(ellipse, rgba(0,0,0,0.5), transparent 70%);
+    border-radius: 50%; animation: shadowPulse 2.4s ease-in-out infinite;
+  }
+  @keyframes shadowPulse {
+    0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.6; }
+    30% { transform: translateX(-50%) scale(0.85); opacity: 0.4; }
+  }
+  .frog-body {
+    position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
+    animation: frogBob 2.4s ease-in-out infinite;
+  }
+  @keyframes frogBob {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    30% { transform: translateX(-50%) translateY(-8px); }
+  }
+  .frog-arm { transform-origin: 78px 92px; animation: armToss 2.4s ease-in-out infinite; }
+  @keyframes armToss {
+    0% { transform: rotate(0deg); } 18% { transform: rotate(-55deg); }
+    30% { transform: rotate(10deg); } 100% { transform: rotate(0deg); }
+  }
+  .coin-toss {
+    position: absolute; left: 50%; bottom: 82px; width: 28px; height: 28px; margin-left: 15px;
+    animation: coinArc 2.4s ease-in-out infinite;
+    filter: drop-shadow(0 0 8px rgba(245,196,81,0.6));
+  }
+  @keyframes coinArc {
+    0% { transform: translate(0,0) scale(0.8) rotateY(0deg); opacity: 0; }
+    16% { opacity: 1; }
+    30% { transform: translate(8px,-78px) scale(1) rotateY(540deg); }
+    48% { transform: translate(16px,-16px) scale(1) rotateY(1080deg); }
+    58% { transform: translate(18px,4px) scale(0.9) rotateY(1260deg); opacity: 1; }
+    64% { opacity: 0; } 100% { opacity: 0; }
+  }
+  .coin-face {
+    width: 100%; height: 100%; border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), #C9922E);
+    border: 2px solid #FFE7A8;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: #3A2A05;
+  }
+
+  /* ---------- Pulsante TAP a forma di moneta-rana ---------- */
+  .tap-btn-wrap { position: relative; width: 200px; height: 200px; margin: 0 auto; }
+  .tap-btn {
+    width: 100%; height: 100%; border-radius: 50%;
+    position: relative;
+    background:
+      radial-gradient(circle at 32% 28%, #E9FFC2 0%, #8FE05B 22%, #3FB65D 55%, #1F7A38 100%);
+    border: 5px solid #FFE7A8;
+    box-shadow:
+      0 0 0 6px rgba(245,196,81,0.18),
+      0 14px 28px rgba(0,0,0,0.45),
+      inset 0 10px 18px rgba(255,255,255,0.35),
+      inset 0 -16px 24px rgba(0,0,0,0.30);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.08s ease;
+    -webkit-user-select: none; user-select: none;
+  }
+  .tap-btn:active { transform: scale(0.95); }
+  .tap-btn.disabled { filter: grayscale(0.6) brightness(0.7); }
+  .tap-btn-label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700; font-size: 26px; letter-spacing: 1px;
+    color: #0B2A12;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.4);
+  }
+  .tap-btn-eyes {
+    position: absolute; top: 34px; width: 100%;
+    display: flex; justify-content: center; gap: 34px;
+  }
+  .tap-btn-eye {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #fff, #0B0E14 70%);
+    border: 3px solid #1F7A38;
+  }
+  .tap-ring {
+    position: absolute; inset: -10px; border-radius: 50%;
+    border: 2px dashed rgba(245,196,81,0.35);
+    animation: ringSpin 12s linear infinite;
+  }
+  @keyframes ringSpin { to { transform: rotate(360deg); } }
+
+  .plus-float {
+    position: absolute;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700; color: var(--gold);
+    pointer-events: none;
+    animation: floatUp 0.7s ease-out forwards;
+  }
+  @keyframes floatUp {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-40px); opacity: 0; }
+  }
+
+  .tab-btn { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 11px; color: var(--muted); padding: 6px 0; }
+  .tab-btn.active { color: var(--text); }
+  .tab-icon { font-size: 20px; }
+
   ::-webkit-scrollbar { display: none; }
 </style>
 </head>
 <body>
-
 <div id="root"></div>
 
 <script type="text/plain" id="app-source">
-const { useState, useEffect, useRef, useCallback } = React;
-const cfg = APP_CONFIG;
+const { useState, useEffect, useRef } = React;
 
 // ---------------------------------------------------------------
-// Utility: formattazione numeri con animazione fluida
+// Chiamate al server: ogni azione passa da qui, mai calcoli locali
 // ---------------------------------------------------------------
+function getInitData() {
+  try {
+    return (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData) || "";
+  } catch (e) {
+    return "";
+  }
+}
+
+async function apiCall(endpoint, body) {
+  const res = await fetch(endpoint, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ initData: getInitData(), ...body }),
+  });
+  const data = await res.json();
+  if (!res.ok) {
+    const err = new Error(data.error || "Errore");
+    err.state = data.state;
+    throw err;
+  }
+  return data;
+}
+
 function useAnimatedNumber(value) {
   const [display, setDisplay] = useState(value);
   const frame = useRef(null);
   useEffect(() => {
     const start = display;
     const diff = value - start;
-    if (diff === 0) return;
-    const duration = 400;
+    if (Math.abs(diff) < 0.001) return;
+    const duration = 350;
     const t0 = performance.now();
     function tick(now) {
       const p = Math.min(1, (now - t0) / duration);
-      setDisplay(Math.round(start + diff * p));
+      setDisplay(Math.round((start + diff * p) * 100) / 100);
       if (p < 1) frame.current = requestAnimationFrame(tick);
     }
     frame.current = requestAnimationFrame(tick);
@@ -229,39 +240,67 @@ function useAnimatedNumber(value) {
   return display;
 }
 
-// ---------------------------------------------------------------
-// Mascotte: rana che lancia una moneta (loop CSS, nessun JS pesante)
-// ---------------------------------------------------------------
 function FrogMascot() {
   return (
     <div className="frog-stage">
       <div className="frog-shadow" />
-      <div className="coin-toss">
-        <div className="coin-face">🪙</div>
-      </div>
+      <div className="coin-toss"><div className="coin-face">🪙</div></div>
       <div className="frog-body">
-        <svg width="140" height="120" viewBox="0 0 140 120">
-          {/* corpo */}
+        <svg width="120" height="102" viewBox="0 0 140 120">
           <ellipse cx="70" cy="78" rx="46" ry="34" fill="#3FB65D" />
-          {/* pancia */}
           <ellipse cx="70" cy="88" rx="30" ry="20" fill="#CFF2CE" />
-          {/* occhio sx */}
           <circle cx="48" cy="42" r="16" fill="#3FB65D" />
           <circle cx="48" cy="42" r="9" fill="#0B0E14" />
           <circle cx="51" cy="39" r="2.5" fill="#fff" />
-          {/* occhio dx */}
           <circle cx="88" cy="42" r="16" fill="#3FB65D" />
           <circle cx="88" cy="42" r="9" fill="#0B0E14" />
           <circle cx="91" cy="39" r="2.5" fill="#fff" />
-          {/* bocca */}
           <path d="M55 62 Q70 72 85 62" stroke="#0B0E14" strokeWidth="3" fill="none" strokeLinecap="round" />
-          {/* zampa/braccio che lancia */}
           <g className="frog-arm">
             <ellipse cx="100" cy="88" rx="10" ry="18" fill="#3FB65D" transform="rotate(20 100 88)" />
           </g>
-          {/* zampa ferma */}
           <ellipse cx="38" cy="92" rx="10" ry="16" fill="#2FA04C" transform="rotate(-15 38 92)" />
         </svg>
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------
+// Countdown airdrop
+// ---------------------------------------------------------------
+function AirdropCountdown({ cfg }) {
+  const [now, setNow] = useState(Date.now());
+  useEffect(() => {
+    const i = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(i);
+  }, []);
+
+  const deadline = new Date(cfg.airdrop.deadlineISO).getTime();
+  const diff = Math.max(0, deadline - now);
+  const days = Math.floor(diff / 86400000);
+  const hours = Math.floor((diff % 86400000) / 3600000);
+  const mins = Math.floor((diff % 3600000) / 60000);
+  const secs = Math.floor((diff % 60000) / 1000);
+
+  const units = [
+    { label: "Giorni", value: days },
+    { label: "Ore", value: hours },
+    { label: "Min", value: mins },
+    { label: "Sec", value: secs },
+  ];
+
+  return (
+    <div className="airdrop-card p-5 flex flex-col items-center gap-3 text-center">
+      <div className="text-xs uppercase tracking-widest text-[var(--gold)]">{cfg.airdrop.title}</div>
+      <div className="text-sm text-[var(--muted)]">{cfg.airdrop.subtitle}</div>
+      <div className="flex gap-2 mt-1">
+        {units.map(u => (
+          <div key={u.label} className="countdown-box text-center">
+            <div className="font-display text-xl font-bold">{String(u.value).padStart(2, '0')}</div>
+            <div className="text-[10px] text-[var(--muted)]">{u.label}</div>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -271,96 +310,77 @@ function FrogMascot() {
 // Splash Screen
 // ---------------------------------------------------------------
 function SplashScreen({ onDone }) {
-  const [ready, setReady] = useState(false);
-
   useEffect(() => {
     try {
       const tg = window.Telegram && window.Telegram.WebApp;
-      if (tg) {
-        tg.ready();
-        tg.expand();
-      }
-    } catch (e) {
-      // Ambiente di test fuori da Telegram: si ignora l'errore
-    }
-    const t = setTimeout(() => setReady(true), 1600);
+      if (tg) { tg.ready(); tg.expand(); }
+    } catch (e) {}
+    const t = setTimeout(onDone, 1400);
     return () => clearTimeout(t);
   }, []);
-
-  useEffect(() => {
-    if (ready) {
-      const t = setTimeout(onDone, 300);
-      return () => clearTimeout(t);
-    }
-  }, [ready]);
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center h-full gap-6">
       <FrogMascot />
       <div className="text-center">
-        <div className="font-display text-2xl font-bold tracking-tight">{cfg.copy.appName}</div>
-        <div className="text-sm text-[var(--muted)] mt-1">{cfg.copy.tagline}</div>
+        <div className="font-display text-2xl font-bold tracking-tight">Tap Coin</div>
+        <div className="text-sm text-[var(--muted)] mt-1">Caricamento del tuo profilo…</div>
       </div>
       <div className="w-40 h-1.5 rounded-full bg-[var(--card-hi)] overflow-hidden">
-        <div className="h-full bg-gradient-to-r from-[var(--cyan)] to-[var(--violet)]"
-             style={{ width: ready ? '100%' : '70%', transition: 'width 1.4s ease' }} />
+        <div className="h-full bg-gradient-to-r from-[var(--cyan)] to-[var(--violet)]" style={{ width: '100%', transition: 'width 1.2s ease' }} />
       </div>
     </div>
   );
 }
 
 // ---------------------------------------------------------------
-// Home: farming passivo + tap-to-earn
+// Home
 // ---------------------------------------------------------------
-function HomeScreen({ state, setState }) {
+function HomeScreen({ cfg, state, setState }) {
   const displayPoints = useAnimatedNumber(state.points);
   const [now, setNow] = useState(Date.now());
+  const [floaters, setFloaters] = useState([]);
+  const [busy, setBusy] = useState(false);
 
   useEffect(() => {
     const i = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(i);
   }, []);
 
-  // Rigenerazione energia
-  useEffect(() => {
-    const i = setInterval(() => {
-      setState(s => ({
-        ...s,
-        energy: Math.min(cfg.tap.maxEnergy, s.energy + cfg.tap.energyRegenPerSecond)
-      }));
-    }, 1000);
-    return () => clearInterval(i);
-  }, []);
-
-  const farmEndsAt = state.farmStartedAt
-    ? state.farmStartedAt + cfg.farming.durationHours * 3600 * 1000
-    : null;
+  const farmEndsAt = state.farmStartedAt ? state.farmStartedAt + cfg.farming.durationHours * 3600 * 1000 : null;
   const farmReady = farmEndsAt && now >= farmEndsAt;
   const farmProgress = state.farmStartedAt
     ? Math.min(1, (now - state.farmStartedAt) / (cfg.farming.durationHours * 3600 * 1000))
     : 0;
 
-  function handleFarmButton() {
-    if (!state.farmStartedAt) {
-      setState(s => ({ ...s, farmStartedAt: Date.now() }));
-    } else if (farmReady) {
-      setState(s => ({
-        ...s,
-        points: s.points + cfg.farming.rewardPerCycle,
-        farmStartedAt: null
-      }));
-    }
+  const tapsLeft = cfg.tap.maxTapsPerDay - state.tapsToday;
+  const limitReached = tapsLeft <= 0;
+
+  async function handleFarmButton() {
+    if (busy) return;
+    setBusy(true);
+    try {
+      const next = state.farmStartedAt
+        ? await apiCall("/api/farm/claim", {})
+        : await apiCall("/api/farm/start", {});
+      setState(s => ({ ...s, ...next }));
+    } catch (e) { /* silenzioso: il pulsante torna semplicemente cliccabile */ }
+    setBusy(false);
   }
 
-  function handleTap() {
-    setState(s => {
-      if (s.energy < cfg.tap.energyCostPerTap) return s;
-      return {
-        ...s,
-        points: s.points + cfg.tap.pointsPerTap,
-        energy: s.energy - cfg.tap.energyCostPerTap
-      };
-    });
+  async function handleTap(e) {
+    if (limitReached) return;
+    const id = Math.random();
+    const rect = e.currentTarget.getBoundingClientRect();
+    setFloaters(f => [...f, { id, x: e.clientX - rect.left, y: e.clientY - rect.top }]);
+    setTimeout(() => setFloaters(f => f.filter(x => x.id !== id)), 700);
+
+    try {
+      const next = await apiCall("/api/tap", {});
+      setState(s => ({ ...s, ...next }));
+    } catch (e) {
+      if (e.state) setState(s => ({ ...s, ...e.state }));
+    }
   }
 
   function fmtTime(ms) {
@@ -373,8 +393,8 @@ function HomeScreen({ state, setState }) {
   }
 
   return (
-    <div className="px-5 pt-6 pb-4 flex flex-col gap-6">
-      <FrogMascot />
+    <div className="px-5 pt-5 pb-4 flex flex-col gap-5">
+      <AirdropCountdown cfg={cfg} />
 
       <div className="text-center">
         <div className="text-xs text-[var(--muted)] mb-1">Saldo totale</div>
@@ -383,48 +403,52 @@ function HomeScreen({ state, setState }) {
         </div>
       </div>
 
-      {/* Farming passivo */}
+      <FrogMascot />
+
+      <div className="flex flex-col items-center gap-2">
+        <div className="tap-btn-wrap" onClick={handleTap}>
+          <div className="tap-ring" />
+          <div className={`tap-btn ${limitReached ? 'disabled' : ''}`}>
+            <div className="tap-btn-eyes">
+              <div className="tap-btn-eye" />
+              <div className="tap-btn-eye" />
+            </div>
+            <span className="tap-btn-label">TAP</span>
+          </div>
+          {floaters.map(f => (
+            <div key={f.id} className="plus-float" style={{ left: f.x, top: f.y }}>
+              +{cfg.tap.rewardPerTap}
+            </div>
+          ))}
+        </div>
+        <div className="text-xs text-[var(--muted)]">
+          {limitReached
+            ? "Limite giornaliero raggiunto — torna domani"
+            : `${tapsLeft} / ${cfg.tap.maxTapsPerDay} tap rimasti oggi`}
+        </div>
+      </div>
+
       <div className="card p-4">
         <div className="flex justify-between items-center mb-3">
           <span className="text-sm font-medium">Mining passivo</span>
           <span className="text-xs text-[var(--muted)]">+{cfg.farming.rewardPerCycle} / {cfg.farming.durationHours}h</span>
         </div>
-        <div className="energy-bar-track mb-3">
-          <div className="energy-bar-fill" style={{ width: `${farmProgress * 100}%` }} />
+        <div className="h-2.5 rounded-full bg-[var(--card-hi)] overflow-hidden mb-3">
+          <div className="h-full bg-gradient-to-r from-[var(--cyan)] to-[var(--violet)]" style={{ width: `${farmProgress * 100}%` }} />
         </div>
         <div className="flex justify-between items-center">
           <span className="text-sm text-[var(--muted)]">
-            {state.farmStartedAt
-              ? (farmReady ? "Pronto per il claim!" : fmtTime(farmEndsAt - now))
-              : "Non attivo"}
+            {state.farmStartedAt ? (farmReady ? "Pronto per il claim!" : fmtTime(farmEndsAt - now)) : "Non attivo"}
           </span>
-          <button
-            onClick={handleFarmButton}
+          <button onClick={handleFarmButton} disabled={busy}
             className="px-5 py-2 rounded-full font-display font-semibold text-sm"
             style={{
-              background: farmReady
-                ? 'linear-gradient(90deg, var(--cyan), var(--violet))'
-                : 'var(--card-hi)',
+              background: farmReady ? 'linear-gradient(90deg, var(--cyan), var(--violet))' : 'var(--card-hi)',
               color: farmReady ? '#0B0E14' : 'var(--text)'
-            }}
-          >
+            }}>
             {!state.farmStartedAt ? cfg.copy.claimButtonIdle : (farmReady ? cfg.copy.claimButtonReady : "In corso…")}
           </button>
         </div>
-      </div>
-
-      {/* Tap to earn */}
-      <div className="card p-5 flex flex-col items-center gap-4">
-        <div className="w-full flex justify-between items-center text-xs text-[var(--muted)]">
-          <span>Energia</span>
-          <span>{state.energy} / {cfg.tap.maxEnergy}</span>
-        </div>
-        <div className="energy-bar-track w-full">
-          <div className="energy-bar-fill" style={{ width: `${(state.energy / cfg.tap.maxEnergy) * 100}%` }} />
-        </div>
-        <button className="tap-coin-btn" onClick={handleTap}>
-          TAP 🐸
-        </button>
       </div>
     </div>
   );
@@ -433,24 +457,22 @@ function HomeScreen({ state, setState }) {
 // ---------------------------------------------------------------
 // Tasks
 // ---------------------------------------------------------------
-function TasksScreen({ state, setState }) {
+function TasksScreen({ cfg, state, setState }) {
   const [pending, setPending] = useState({});
 
   function startTask(task) {
     window.open(task.url, '_blank');
     setPending(p => ({ ...p, [task.id]: 'verifying' }));
-    setTimeout(() => {
-      setPending(p => ({ ...p, [task.id]: 'ready' }));
-    }, task.verifySeconds * 1000);
+    setTimeout(() => setPending(p => ({ ...p, [task.id]: 'ready' })), task.verifySeconds * 1000);
   }
 
-  function claimTask(task) {
-    setState(s => ({
-      ...s,
-      points: s.points + task.reward,
-      completedTasks: [...s.completedTasks, task.id]
-    }));
-    setPending(p => ({ ...p, [task.id]: 'done' }));
+  async function claimTask(task) {
+    try {
+      const next = await apiCall("/api/task/claim", { taskId: task.id });
+      setState(s => ({ ...s, ...next }));
+    } catch (e) {
+      if (e.state) setState(s => ({ ...s, ...e.state }));
+    }
   }
 
   const categories = [...new Set(cfg.tasks.map(t => t.category))];
@@ -470,24 +492,14 @@ function TasksScreen({ state, setState }) {
                   <div className="text-sm font-medium">{task.title}</div>
                   <div className="text-xs text-[var(--gold)]">+{task.reward} {cfg.tokenName}</div>
                 </div>
-                {status === 'done' && (
-                  <span className="text-xs text-[var(--cyan)] font-medium">Fatto ✓</span>
-                )}
+                {status === 'done' && <span className="text-xs text-[var(--cyan)] font-medium">Fatto ✓</span>}
                 {status === 'idle' && (
-                  <button onClick={() => startTask(task)}
-                    className="px-4 py-1.5 rounded-full text-xs font-semibold bg-[var(--card-hi)]">
-                    Vai
-                  </button>
+                  <button onClick={() => startTask(task)} className="px-4 py-1.5 rounded-full text-xs font-semibold bg-[var(--card-hi)]">Vai</button>
                 )}
-                {status === 'verifying' && (
-                  <span className="text-xs text-[var(--muted)]">Verifica…</span>
-                )}
+                {status === 'verifying' && <span className="text-xs text-[var(--muted)]">Verifica…</span>}
                 {status === 'ready' && (
-                  <button onClick={() => claimTask(task)}
-                    className="px-4 py-1.5 rounded-full text-xs font-semibold"
-                    style={{ background: 'linear-gradient(90deg, var(--cyan), var(--violet))', color: '#0B0E14' }}>
-                    Claim
-                  </button>
+                  <button onClick={() => claimTask(task)} className="px-4 py-1.5 rounded-full text-xs font-semibold"
+                    style={{ background: 'linear-gradient(90deg, var(--cyan), var(--violet))', color: '#0B0E14' }}>Claim</button>
                 )}
               </div>
             );
@@ -499,72 +511,48 @@ function TasksScreen({ state, setState }) {
 }
 
 // ---------------------------------------------------------------
-// Referral / Frenz
+// Frenz / Referral
 // ---------------------------------------------------------------
-function FrenzScreen({ state }) {
-  const userId = (window.Telegram?.WebApp?.initDataUnsafe?.user?.id) || "demo";
-  const inviteLink = `https://t.me/${cfg.botUsername}/${cfg.miniAppShortName}?startapp=${userId}`;
+function FrenzScreen({ cfg, state }) {
+  const inviteLink = `https://t.me/${cfg.botUsername}/${cfg.miniAppShortName}?startapp=${state.id}`;
 
   function shareInvite() {
     const tg = window.Telegram && window.Telegram.WebApp;
     const text = encodeURIComponent(cfg.referral.inviteMessage);
     const url = `https://t.me/share/url?url=${encodeURIComponent(inviteLink)}&text=${text}`;
-    if (tg && tg.openTelegramLink) {
-      tg.openTelegramLink(url);
-    } else {
-      window.open(url, '_blank');
-    }
+    if (tg && tg.openTelegramLink) tg.openTelegramLink(url); else window.open(url, '_blank');
   }
 
   return (
     <div className="px-5 pt-6 pb-4 flex flex-col gap-6">
       <div className="font-display text-xl font-bold">Invita amici</div>
-
       <div className="card p-5 text-center flex flex-col gap-3">
         <div className="text-sm text-[var(--muted)]">
           Guadagna <span className="text-[var(--gold)] font-semibold">+{cfg.referral.bonusPercent}%</span> dei punti dei tuoi amici, per sempre.
         </div>
-        <button onClick={shareInvite}
-          className="mt-2 py-3 rounded-full font-display font-semibold text-sm"
+        <button onClick={shareInvite} className="mt-2 py-3 rounded-full font-display font-semibold text-sm"
           style={{ background: 'linear-gradient(90deg, var(--cyan), var(--violet))', color: '#0B0E14' }}>
           Invita un amico
         </button>
       </div>
-
-      <div className="flex flex-col gap-2">
-        <div className="text-xs uppercase tracking-wide text-[var(--muted)]">
-          I tuoi amici ({state.referrals.length})
-        </div>
-        {state.referrals.length === 0 && (
-          <div className="card p-4 text-sm text-[var(--muted)] text-center">
-            Nessun amico invitato ancora.
-          </div>
-        )}
-        {state.referrals.map((r, i) => (
-          <div key={i} className="card p-3 flex justify-between items-center text-sm">
-            <span>{r.name}</span>
-            <span className="text-[var(--gold)]">+{r.earned} {cfg.tokenName}</span>
-          </div>
-        ))}
+      <div className="card p-4 text-center">
+        <div className="text-2xl font-display font-bold">{state.referralsCount}</div>
+        <div className="text-xs text-[var(--muted)]">amici invitati</div>
       </div>
     </div>
   );
 }
 
 // ---------------------------------------------------------------
-// Wallet (TON Connect — solo collegamento, nessun trasferimento)
+// Wallet
 // ---------------------------------------------------------------
 function WalletScreen({ state, setState }) {
-  function connectWallet() {
-    // Placeholder di collegamento: qui andrà integrato il vero
-    // TonConnect SDK (@tonconnect/ui) quando pubblichi davvero l'app.
-    const fakeAddress = "EQAbc123...xyz9";
-    setState(s => ({
-      ...s,
-      wallet: fakeAddress,
-      points: s.walletBadgeClaimed ? s.points : s.points + 100,
-      walletBadgeClaimed: true
-    }));
+  async function connectWallet() {
+    const fakeAddress = "EQAbc123...xyz9"; // placeholder finché non integri il vero TonConnect SDK
+    try {
+      const next = await apiCall("/api/wallet/connect", { address: fakeAddress });
+      setState(s => ({ ...s, ...next }));
+    } catch (e) {}
   }
 
   return (
@@ -576,17 +564,12 @@ function WalletScreen({ state, setState }) {
           <>
             <div className="text-sm text-[var(--muted)]">Wallet collegato</div>
             <div className="font-mono text-sm">{state.wallet}</div>
-            <span className="text-xs px-3 py-1 rounded-full" style={{ background: 'var(--card-hi)', color: 'var(--gold)' }}>
-              🏅 Badge sbloccato
-            </span>
+            <span className="text-xs px-3 py-1 rounded-full" style={{ background: 'var(--card-hi)', color: 'var(--gold)' }}>🏅 Badge sbloccato</span>
           </>
         ) : (
           <>
-            <div className="text-sm text-[var(--muted)]">
-              Collega il tuo wallet TON per sbloccare un badge esclusivo.
-            </div>
-            <button onClick={connectWallet}
-              className="px-6 py-3 rounded-full font-display font-semibold text-sm"
+            <div className="text-sm text-[var(--muted)]">Collega il tuo wallet TON per sbloccare un badge esclusivo.</div>
+            <button onClick={connectWallet} className="px-6 py-3 rounded-full font-display font-semibold text-sm"
               style={{ background: 'linear-gradient(90deg, var(--cyan), var(--violet))', color: '#0B0E14' }}>
               TON Connect
             </button>
@@ -600,23 +583,19 @@ function WalletScreen({ state, setState }) {
 // ---------------------------------------------------------------
 // Daily Check-in
 // ---------------------------------------------------------------
-function DailyCheckinModal({ state, setState, onClose }) {
+function DailyCheckinModal({ cfg, state, setState, onClose }) {
   const dayIndex = Math.min(state.streak, cfg.dailyCheckin.rewards.length - 1);
   const reward = cfg.dailyCheckin.rewards[dayIndex];
   const isMystery = reward === 'mystery';
+  const [loading, setLoading] = useState(false);
 
-  function claim() {
-    let gained = reward;
-    if (isMystery) {
-      const { mysteryBoxMin, mysteryBoxMax } = cfg.dailyCheckin;
-      gained = Math.floor(mysteryBoxMin + Math.random() * (mysteryBoxMax - mysteryBoxMin));
-    }
-    setState(s => ({
-      ...s,
-      points: s.points + gained,
-      streak: (s.streak + 1) % cfg.dailyCheckin.rewards.length,
-      lastCheckin: Date.now()
-    }));
+  async function claim() {
+    setLoading(true);
+    try {
+      const next = await apiCall("/api/checkin", {});
+      setState(s => ({ ...s, ...next }));
+    } catch (e) {}
+    setLoading(false);
     onClose();
   }
 
@@ -624,14 +603,11 @@ function DailyCheckinModal({ state, setState, onClose }) {
     <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/70 px-6">
       <div className="card p-6 w-full flex flex-col items-center gap-4 text-center">
         <div className="text-4xl">{isMystery ? "🎁" : "🐸"}</div>
-        <div className="font-display text-lg font-bold">
-          Giorno {dayIndex + 1} di 7
-        </div>
+        <div className="font-display text-lg font-bold">Giorno {dayIndex + 1} di 7</div>
         <div className="text-sm text-[var(--muted)]">
           {isMystery ? "Mystery Box! Apri per scoprire il premio." : `Ricevi ${reward} ${cfg.tokenName} per essere tornato oggi.`}
         </div>
-        <button onClick={claim}
-          className="w-full py-3 rounded-full font-display font-semibold text-sm"
+        <button onClick={claim} disabled={loading} className="w-full py-3 rounded-full font-display font-semibold text-sm"
           style={{ background: 'linear-gradient(90deg, var(--gold), var(--cyan))', color: '#0B0E14' }}>
           {isMystery ? "Apri" : "Ritira"}
         </button>
@@ -644,33 +620,55 @@ function DailyCheckinModal({ state, setState, onClose }) {
 // App principale
 // ---------------------------------------------------------------
 function App() {
-  const [booted, setBooted] = useState(false);
+  const [phase, setPhase] = useState('splash'); // splash -> loading -> ready -> error
+  const [cfg, setCfg] = useState(null);
+  const [state, setState] = useState(null);
   const [tab, setTab] = useState('home');
-  const [state, setState] = useState({
-    points: 0,
-    energy: cfg.tap.maxEnergy,
-    farmStartedAt: null,
-    completedTasks: [],
-    referrals: [],
-    wallet: null,
-    walletBadgeClaimed: false,
-    streak: 0,
-    lastCheckin: null,
-  });
   const [showCheckin, setShowCheckin] = useState(false);
 
-  useEffect(() => {
-    if (!booted) return;
-    const last = state.lastCheckin;
-    const oneDay = 24 * 3600 * 1000;
-    if (!last || Date.now() - last > oneDay) {
-      setShowCheckin(true);
-    }
-    // eslint-disable-next-line
-  }, [booted]);
+  async function boot() {
+    try {
+      const [cfgRes, authRes] = await Promise.all([
+        fetch('/api/config').then(r => r.json()),
+        apiCall('/api/auth', {}),
+      ]);
+      setCfg(cfgRes);
+      setState(authRes);
 
-  if (!booted) {
-    return <SplashScreen onDone={() => setBooted(true)} />;
+      const today = new Date().toISOString().slice(0, 10);
+      const lastDay = authRes.lastCheckin ? new Date(authRes.lastCheckin).toISOString().slice(0, 10) : null;
+      if (lastDay !== today) setShowCheckin(true);
+
+      setPhase('ready');
+    } catch (e) {
+      setPhase('error');
+    }
+  }
+
+  if (phase === 'splash') {
+    return <SplashScreen onDone={() => { setPhase('loading'); boot(); }} />;
+  }
+
+  if (phase === 'loading' || !cfg || !state) {
+    return (
+      <div className="flex-1 flex items-center justify-center h-full">
+        <div className="text-sm text-[var(--muted)]">Sincronizzazione con il server…</div>
+      </div>
+    );
+  }
+
+  if (phase === 'error') {
+    return (
+      <div className="flex-1 flex flex-col items-center justify-center h-full gap-3 px-6 text-center">
+        <div className="text-sm text-[var(--muted)]">
+          Impossibile collegarsi al server. Apri l'app da Telegram e riprova.
+        </div>
+        <button onClick={() => { setPhase('loading'); boot(); }}
+          className="px-5 py-2 rounded-full text-sm font-semibold" style={{ background: 'var(--card-hi)' }}>
+          Riprova
+        </button>
+      </div>
+    );
   }
 
   const tabs = [
@@ -683,16 +681,15 @@ function App() {
   return (
     <div className="flex flex-col h-full relative">
       <div className="scroll-area">
-        {tab === 'home' && <HomeScreen state={state} setState={setState} />}
-        {tab === 'tasks' && <TasksScreen state={state} setState={setState} />}
-        {tab === 'frenz' && <FrenzScreen state={state} />}
+        {tab === 'home' && <HomeScreen cfg={cfg} state={state} setState={setState} />}
+        {tab === 'tasks' && <TasksScreen cfg={cfg} state={state} setState={setState} />}
+        {tab === 'frenz' && <FrenzScreen cfg={cfg} state={state} />}
         {tab === 'wallet' && <WalletScreen state={state} setState={setState} />}
       </div>
 
       <div className="grid grid-cols-4 border-t border-white/5 bg-[var(--card)] pb-[env(safe-area-inset-bottom)]">
         {tabs.map(t => (
-          <button key={t.id} onClick={() => setTab(t.id)}
-            className={`tab-btn ${tab === t.id ? 'active' : ''}`}>
+          <button key={t.id} onClick={() => setTab(t.id)} className={`tab-btn ${tab === t.id ? 'active' : ''}`}>
             <span className="tab-icon">{t.icon}</span>
             <span>{t.label}</span>
           </button>
@@ -700,7 +697,7 @@ function App() {
       </div>
 
       {showCheckin && (
-        <DailyCheckinModal state={state} setState={setState} onClose={() => setShowCheckin(false)} />
+        <DailyCheckinModal cfg={cfg} state={state} setState={setState} onClose={() => setShowCheckin(false)} />
       )}
     </div>
   );
@@ -710,14 +707,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script>
 
 <script>
-  // Trasformiamo manualmente il codice sopra con il runtime "classic":
-  // evita che Babel generi un import di react/jsx-runtime, che non
-  // funziona senza un sistema di moduli (causerebbe un errore nel browser).
+  // Trasformiamo il codice sopra con il runtime "classic" di Babel:
+  // evita che venga generato un import di react/jsx-runtime, che
+  // non funziona senza un sistema di moduli nel browser.
   (function () {
     var source = document.getElementById('app-source').textContent;
-    var output = Babel.transform(source, {
-      presets: [["react", { runtime: "classic" }]]
-    }).code;
+    var output = Babel.transform(source, { presets: [["react", { runtime: "classic" }]] }).code;
     var script = document.createElement('script');
     script.textContent = output;
     document.body.appendChild(script);
