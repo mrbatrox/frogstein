@@ -1,0 +1,16 @@
+{
+  "name": "tap-crypto-miniapp",
+  "version": "1.0.0",
+  "description": "Telegram Mini App tap-to-earn per pre-lancio community crypto",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5"
+  }
+}

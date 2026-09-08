@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Tap Coin</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+  :root {
+    --bg: var(--tg-theme-bg-color, #0f0f1a);
+    --text: var(--tg-theme-text-color, #ffffff);
+    --hint: var(--tg-theme-hint-color, #888);
+    --button: var(--tg-theme-button-color, #6c5ce7);
+    --button-text: var(--tg-theme-button-text-color, #ffffff);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
+  }
+  h1 { font-size: 18px; font-weight: 600; margin: 8px 0 0; }
+  .score { font-size: 42px; font-weight: 800; margin: 8px 0; letter-spacing: 1px; }
+  .energy-wrap {
+    width: 100%; max-width: 320px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 8px 12px;
+    margin-bottom: 20px;
+  }
+  .energy-bar-bg { background: rgba(255,255,255,0.15); border-radius: 8px; height: 10px; overflow: hidden; }
+  .energy-bar-fill { background: linear-gradient(90deg,#6c5ce7,#a29bfe); height: 100%; transition: width .2s; }
+  .energy-label { font-size: 12px; color: var(--hint); margin-top: 4px; display: flex; justify-content: space-between; }
+
+  .coin {
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #ffe9a8, #f5b942 60%, #c9891a);
+    box-shadow: 0 10px 30px rgba(245,185,66,0.4), inset 0 -8px 20px rgba(0,0,0,0.25);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 80px;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    cursor: pointer;
+    margin: 10px 0 24px;
+    transition: transform .08s;
+  }
+  .coin:active { transform: scale(0.93); }
+
+  .float-plus {
+    position: fixed;
+    font-weight: 700;
+    font-size: 22px;
+    color: #ffe9a8;
+    pointer-events: none;
+    animation: floatUp .8s ease-out forwards;
+    z-index: 10;
+  }
+  @keyframes floatUp {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-60px); }
+  }
+
+  .actions { display: flex; gap: 10px; width: 100%; max-width: 320px; }
+  button.secondary {
+    flex: 1;
+    background: rgba(255,255,255,0.1);
+    color: var(--text);
+    border: none;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .cta {
+    width: 100%; max-width: 320px;
+    background: var(--button);
+    color: var(--button-text);
+    border: none;
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 700;
+    margin-top: 14px;
+  }
+
+  .panel {
+    width: 100%; max-width: 320px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 14px;
+    padding: 14px;
+    margin-top: 16px;
+    display: none;
+  }
+  .panel.show { display: block; }
+  .lb-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 14px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .lb-row:last-child { border-bottom: none; }
+  .disclaimer { font-size: 11px; color: var(--hint); text-align: center; margin-top: 18px; line-height: 1.4; }
+</style>
+</head>
+<body>
+  <h1>🪙 Tap Coin</h1>
+  <div class="score" id="score">0</div>
+
+  <div class="energy-wrap">
+    <div class="energy-bar-bg"><div class="energy-bar-fill" id="energyFill" style="width:100%"></div></div>
+    <div class="energy-label"><span id="energyText">1000 / 1000</span><span>⚡ energia</span></div>
+  </div>
+
+  <div class="coin" id="coin">🪙</div>
+
+  <div class="actions">
+    <button class="secondary" id="btnInvite">👥 Invita amici</button>
+    <button class="secondary" id="btnLeaderboard">🏆 Classifica</button>
+  </div>
+
+  <div class="panel" id="leaderboardPanel"></div>
+
+  <p class="disclaimer">
+    I punti raccolti qui potrebbero dare diritto a un futuro airdrop se e quando il progetto lancerà un token.
+    Nessun valore monetario garantito. Partecipa solo per divertimento e community building.
+  </p>
+
+<script>
+const tg = window.Telegram.WebApp;
+tg.ready();
+tg.expand();
+
+const API_BASE = ''; // stesso dominio del backend
+
+let state = { score: 0, energy: 1000, maxEnergy: 1000, referralCode: null };
+let pendingTaps = 0;
+let flushTimer = null;
+
+const scoreEl = document.getElementById('score');
+const energyFill = document.getElementById('energyFill');
+const energyText = document.getElementById('energyText');
+const coinEl = document.getElementById('coin');
+const leaderboardPanel = document.getElementById('leaderboardPanel');
+
+function getInitData() {
+  return tg.initData || '';
+}
+
+function renderState() {
+  scoreEl.textContent = state.score.toLocaleString('it-IT');
+  const pct = Math.max(0, Math.min(100, (state.energy / state.maxEnergy) * 100));
+  energyFill.style.width = pct + '%';
+  energyText.textContent = `${Math.floor(state.energy)} / ${state.maxEnergy}`;
+}
+
+function spawnFloatingPlus(x, y) {
+  const el = document.createElement('div');
+  el.className = 'float-plus';
+  el.textContent = '+1';
+  el.style.left = x + 'px';
+  el.style.top = y + 'px';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 800);
+}
+
+async function apiPost(path, body) {
+  const res = await fetch(API_BASE + path, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error('Request failed: ' + path);
+  return res.json();
+}
+
+async function init() {
+  try {
+    const data = await apiPost('/api/auth', { initData: getInitData() });
+    state.score = data.score;
+    state.energy = data.energy;
+    state.maxEnergy = data.maxEnergy;
+    state.referralCode = data.referralCode;
+    renderState();
+
+    // Gestione referral: se l'app è stata aperta con ?startapp=ref_XXXX
+    const startParam = tg.initDataUnsafe?.start_param;
+    if (startParam && startParam.startsWith('ref_')) {
+      const refCode = startParam.replace('ref_', '');
+      try {
+        const r = await apiPost('/api/referral/claim', { initData: getInitData(), refCode });
+        state.score = r.score;
+        renderState();
+        tg.showAlert(`🎉 Bonus referral ricevuto: +${r.bonus} punti!`);
+      } catch (e) { /* referral già riscattato o non valido: si ignora silenziosamente */ }
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+function flushTaps() {
+  if (pendingTaps === 0) return;
+  const toSend = pendingTaps;
+  pendingTaps = 0;
+  apiPost('/api/tap', { initData: getInitData(), taps: toSend })
+    .then((r) => {
+      state.score = r.score;
+      state.energy = r.energy;
+      renderState();
+    })
+    .catch(console.error);
+}
+
+coinEl.addEventListener('click', (e) => {
+  if (state.energy <= 0) {
+    tg.HapticFeedback?.notificationOccurred('warning');
+    return;
+  }
+  tg.HapticFeedback?.impactOccurred('light');
+  state.energy -= 1;
+  state.score += 1;
+  renderState();
+  spawnFloatingPlus(e.clientX - 10, e.clientY - 10);
+
+  pendingTaps += 1;
+  clearTimeout(flushTimer);
+  flushTimer = setTimeout(flushTaps, 600);
+});
+
+document.getElementById('btnInvite').addEventListener('click', () => {
+  const botUsername = 'IL_TUO_BOT_USERNAME'; // <-- sostituisci con lo username del tuo bot
+  const link = `https://t.me/${botUsername}/app?startapp=ref_${state.referralCode}`;
+  tg.switchInlineQuery
+    ? tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent('Unisciti a Tap Coin e guadagna punti insieme a me! 🪙')}`)
+    : navigator.clipboard.writeText(link);
+});
+
+document.getElementById('btnLeaderboard').addEventListener('click', async () => {
+  const isShown = leaderboardPanel.classList.toggle('show');
+  if (!isShown) return;
+  try {
+    const list = await fetch(API_BASE + '/api/leaderboard').then((r) => r.json());
+    leaderboardPanel.innerHTML = list
+      .map((u, i) => `<div class="lb-row"><span>${i + 1}. ${u.username}</span><span>${u.score.toLocaleString('it-IT')}</span></div>`)
+      .join('') || '<div class="lb-row">Nessun dato ancora</div>';
+  } catch (e) {
+    leaderboardPanel.innerHTML = '<div class="lb-row">Errore nel caricamento</div>';
+  }
+});
+
+init();
+</script>
+</body>
+</html>
