@@ -4,8 +4,6 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
 <title>Tap Coin</title>
-<head><script src="https://telegram.org"></script>
-
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
@@ -203,7 +201,7 @@
 
 <div id="root"></div>
 
-<script type="text/babel" data-presets="react">
+<script type="text/plain" id="app-source">
 const { useState, useEffect, useRef, useCallback } = React;
 const cfg = APP_CONFIG;
 
@@ -709,6 +707,21 @@ function App() {
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+
+<script>
+  // Trasformiamo manualmente il codice sopra con il runtime "classic":
+  // evita che Babel generi un import di react/jsx-runtime, che non
+  // funziona senza un sistema di moduli (causerebbe un errore nel browser).
+  (function () {
+    var source = document.getElementById('app-source').textContent;
+    var output = Babel.transform(source, {
+      presets: [["react", { runtime: "classic" }]]
+    }).code;
+    var script = document.createElement('script');
+    script.textContent = output;
+    document.body.appendChild(script);
+  })();
 </script>
 </body>
 </html>
