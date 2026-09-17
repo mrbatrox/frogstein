@@ -1,0 +1,19 @@
+{
+  "users": {
+    "local_demo": {
+      "id": "local_demo",
+      "name": "Demo",
+      "points": 131.5,
+      "tapsToday": 21,
+      "tapDate": "2026-09-08",
+      "farmStartedAt": null,
+      "completedTasks": [],
+      "referrerId": null,
+      "referralsCount": 0,
+      "wallet": null,
+      "streak": 1,
+      "lastCheckin": 1788903456582,
+      "createdAt": 1788903455356
+    }
+  }
+}
